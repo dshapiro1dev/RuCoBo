@@ -33,7 +33,7 @@ print("-------------------------------")
 
 # you can create a list of items - and a separator - and print knows to print them separated by it
 # lets print a list of things separated by a comma
-print('apple','orange','fruit','dirty-sock','yak-teriyaki, sep=',')
+print('apple','orange','fruit','dirty-sock','yak-teriyaki', sep=',')
 print("-------------------------------")
 
 # you can also use the special character \n which means explicitly new line
