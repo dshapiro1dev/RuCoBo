@@ -1,9 +1,14 @@
+#   The # is a comment - it is put at a front of a line , to inform the reader only
+#   Python does not read any lines starting with a # - it jumps right over them. They are called comments
+
+#   This script should be run in the debugger step by step - to see how each line works
+
 # PrintCommand
 # this script shows how the print command works
 # each example will be separated by a line
 
 # print a basic string
-print("This is a basic print")
+print("This is a basic print - about emus")
 print("-------------------------------")
 
 # you need parentheses - the print statement below will not work - uncomment and try it
@@ -17,18 +22,18 @@ print(type(print))
 print("-------------------------------")
 
 # if you want to add a newline between prints - ie: on 2 different lines
-print("Hello, line1 ");print("Hello, line2")
+print("Hello, emu ");print("Hello, yak")
 print("-------------------------------")
 
 # an empty print statement creates a newline only
-print("first line - then there will be a space ")
+print("first line -  yak-attack: the emus are coming - then there will be a space ")
 print()
 print("there is a gap above")
 print("-------------------------------")
 
 # you can create a list of items - and a separator - and print knows to print them separated by it
 # lets print a list of things separated by a comma
-print('apple','orange','fruit','dirty-sock', sep=',')
+print('apple','orange','fruit','dirty-sock','yak-teriyaki, sep=',')
 print("-------------------------------")
 
 # you can also use the special character \n which means explicitly new line
@@ -57,8 +62,8 @@ print("-------------------------------")
 #           but we can say - actually end the print with something else
 # so here - we are going to print a string - and instead of a newline - end it with :, then print another
 # this will output:    string1:string2     - separated by a colon
-print("string1",end=":")
-print("string2")
+print("yak number1",end=":")
+print("yak number2")
 print("-------------------------------")
 
 # if we use a list, and an end specification - it will print the list
@@ -86,6 +91,7 @@ danoutputfile = open("junkyfile.txt","w")
 print("This is my junky file",file=danoutputfile)
 print("A really junky file,  yeah yeah yeah",file=danoutputfile)
 
+
 # and finally we need to close the file - so that Python knows to write everything pending to it and complete
 danoutputfile.close()
 
@@ -99,7 +105,11 @@ print("-------------------------------")
 # sometimes when you write a tremendous amount, it keeps a buffer of stuff and only
 # flushes occasionally.  If you want to force it to flush after the print statement use Flush
 print("flush this sucker now",flush=True)
+print("-------------------------------")
 
+# now we will show how to accept input from a user
+# here we will prompt the user in an overly polite and possibly irreverent manner
+# then print out what they have provided.
 testit = input("dear esteemed and honorable user, type your very important input in here: ")
 print("Dear user - you typed: ")
 print(testit)
