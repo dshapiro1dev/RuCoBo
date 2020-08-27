@@ -143,8 +143,9 @@ print( really.lstrip()) # 'why must you start...'
 # lets replace certain parts of a string with another
 messedup = 'i lovx xmus morx than yaks but dont txll anyonx'
 print( messedup.replace('x','e'))  # find every x  and replace with an e  - fixing the string
-
-# remember we can not change a string in place - we must assign a change to a new string
+# the original string however is still messed up
+print(messedup)
+# because , remember we can not change a string in place - we must assign a change to a new string
 newstr = messedup.replace('x','e')
 # but we can also overwrite the original string like this
 messedup = messedup.replace('x','e')
