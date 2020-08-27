@@ -155,3 +155,4 @@ print(words[0:2])  # take only the first two words
 # to see them and play with them type  sx="test,  then sx.  in PyCharm - and it will show you a long list of options
 sx = "test"
 #  type this below in PyCharm and see the list:   sx.
+
