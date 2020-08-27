@@ -20,3 +20,4 @@ print(final) # and this does the same thing. first puts the results into a strin
 # the 'formatter' class is another way to operate - but we'll cover more complex string formatting later
 print("I sold {0} delicious {1} on amazon. now the feds are after me".format(198,'yaks'))
 
+
