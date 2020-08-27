@@ -144,6 +144,12 @@ print( really.lstrip()) # 'why must you start...'
 messedup = 'i lovx xmus morx than yaks but dont txll anyonx'
 print( messedup.replace('x','e'))  # find every x  and replace with an e  - fixing the string
 
+# remember we can not change a string in place - we must assign a change to a new string
+newstr = messedup.replace('x','e')
+# but we can also overwrite the original string like this
+messedup = messedup.replace('x','e')
+print(messedup) # now the 'messedup' string is actually fixed - but we lost the original
+
 # lets split a sentence into words
 # here we will split by the whitespace
 sentence = "yak tartar is served only at the finest and most unusual establishments. Avoid them"
