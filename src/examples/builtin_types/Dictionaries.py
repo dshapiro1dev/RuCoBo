@@ -24,4 +24,24 @@ temperatures = {
 # Can you tell which is which?  If you go in the debugger and inspect temperatures - you will see
 
 
-print(3)
+# now an intrepid cook can look up the temperature they need in a hurry
+# notice that the temperature is an integer - so we need to convert it to a string
+# otherwise we can not concatenate a string and an integer
+print("Hey python - can you give me the temperature I need to cook bison to?")
+print("Why yes clueless cook: " + str(temperatures['bison']))
+
+# here the snail 'temperature' is already a string - but it does not hurt to convert it
+# since technically we do not know up front about the helpful entry in the dictionary under 'snail'
+print("What about snail - what do I cook a snail to?")
+print("Seriously clueless cook: " + str(temperatures['snail']))
+
+# what if we try cook an exotic meat that is not in our dictionary
+print("Hey python - I want to cook  iguana cheeks")
+if('iguana' in temperatures.keys()):
+    print("Iguanas -> do this::" + str( temperatures['iguana']))
+else:
+    print("Humble apologies - we do not have Iguana cooking instructions. An oversight")
+# had we tried to force access to a non-existent key - the program would have crashed
+# here we check first if the dictionary knows about Iguanas
+# fortunately it does not
+
