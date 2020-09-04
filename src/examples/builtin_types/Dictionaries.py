@@ -109,3 +109,10 @@ print(recipe_book['yak dict']['yak tartar'])
 
 # you can nest arbitrary number of dictionaries (or any other structure) within other structures ...
 
+# lets make a dictionary of numbers, and those numbers to the power of 3 as the value
+cubes = {
+    i : i*i*i for i in [1,2,3,4,5]
+}
+print(cubes)
+# this gives us the keys 1,2,3,4,5  and for each of those keys, stores the value: i * i * i  ie: the cube
+
