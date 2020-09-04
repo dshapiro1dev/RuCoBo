@@ -114,5 +114,60 @@ cubes = {
     i : i*i*i for i in [1,2,3,4,5]
 }
 print(cubes)
-# this gives us the keys 1,2,3,4,5  and for each of those keys, stores the value: i * i * i  ie: the cube
+# this sets up the keys 1,2,3,4,5  and for each of those keys, stores the value: i * i * i  ie: the cube
+
+# now lets sort a dictionary by values
+# here we set up come friendly critters, and how much they weigh - in a dictionary
+weights = {
+    'snail' : 1,
+    'ferret' : 5,
+    'mammoth' : 1000,
+    'overweight mammoth' : 2000,
+    'yak' : 100,
+    'cow with barbells' : 200
+}
+
+# lets sort the animals by weight
+# this is a tricky call - lets break it apart
+# 1. weights.items() -> this grabs all the items in the dictionary. An item is a tuple of [ animal, weight]
+#    ie: this is all the 6 entries in the 'weights' dictionary
+# 2. then run a sort function on them - but we are going to specify the function
+#    the 'key' by which the sort function will work is going to look within the tuple
+#    and access the value in x[1] - remember that the tuple has 2 values
+#    x[0] is the key,  x[1] is the value
+#    so we are saying: take the item (which is the tuple)
+#    take the 2nd part of it (which is the value)
+#    and sort using that
+# lambda is an interesting thing: it is a function without a name
+# we'll get to functions later
+sorted_critters = sorted(weights.items(), key=lambda x: x[1])
+
+for i in sorted_critters:
+	print(i[0], i[1])
+
+# you should get this:
+# snail 1
+# ferret 5
+# yak 100
+# cow with barbells 200
+# mammoth 1000
+# overweight mammoth 2000
+
+# now lets sort instead by the name of the critter
+print("--------\n\n")
+sorted_critters = sorted(weights.items(), key=lambda x: x[0])
+
+for i in sorted_critters:
+	print(i[0], i[1])
+
+# this time it prints out entries in alphabetic order  c,f,m,o,s,y
+# cow with barbells 200
+# ferret 5
+# mammoth 1000
+# overweight mammoth 2000
+# snail 1
+# yak 100
+
+# the above examples cover both for loops and sorting
+# we'll spend a lot more time on these later
 
