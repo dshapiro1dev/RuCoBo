@@ -45,3 +45,11 @@ else:
 # here we check first if the dictionary knows about Iguanas
 # fortunately it does not
 
+# but lets see if we can get the list of keys up front - to know how exhaustive is the dictionary
+meats = temperatures.keys()  # this gets the keys into the list called 'means
+print(meats)
+# will print out:  dict_keys(['salmon', 'beef', 'bison', 'yak', 'chicken', 'snail'])
+
+# and then we can cycle through each delicious critter to see what cooking temperatures are, like
+for critter in meats:  # go through each critter
+    print("If you're grilling :" + str(critter) + " you should cook to a temperature  : " + str(temperatures[critter]))
