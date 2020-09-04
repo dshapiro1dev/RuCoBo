@@ -55,6 +55,7 @@ for critter in meats:  # go through each critter
     print("If you're grilling :" + str(critter) + " you should cook to a temperature  : " + str(temperatures[critter]))
 
 # you can not have 2 keys in a dictionary which are the same
+# if you hover the mouse over this - Pycharm will complain that dictionary contains duplicate keys
 lovesmost = {
     'dan' : 'steak',
     'dan' : 'yak burger with fries and a side of mayo on a sesame roll with ketchup'
@@ -153,7 +154,7 @@ for i in sorted_critters:
 # mammoth 1000
 # overweight mammoth 2000
 
-# now lets sort instead by the name of the critter
+# now lets sort instead by the name of the critter  ( we use x[0] , not x[1] )
 print("--------\n\n")
 sorted_critters = sorted(weights.items(), key=lambda x: x[0])
 
