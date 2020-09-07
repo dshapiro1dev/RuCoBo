@@ -57,3 +57,12 @@ new_handle.close()
 new_handle  = open("../../../data/poems/if_yaks","a")  # file already exists - notice "a" for append
 print("\n-> This improvement on Kipling proudly brought to you by: RuCoBo Yaks",file=new_handle)
 new_handle.close() # and as always - close the file after we're done
+
+
+# files live in a directory
+# sometimes we want to see all the files that exist in a directory
+import os  # this is the first time we 'import' - we bring a library in - will cover this later
+flist = os.listdir("../../../data/presidentspeeches/raw/") # flist gets all files in directory
+for f in flist[1:5]:  # lets print the first 5 files in this directory
+    print(f)
+
