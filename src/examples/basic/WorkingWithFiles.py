@@ -62,7 +62,14 @@ new_handle.close() # and as always - close the file after we're done
 # files live in a directory
 # sometimes we want to see all the files that exist in a directory
 import os  # this is the first time we 'import' - we bring a library in - will cover this later
-flist = os.listdir("../../../data/presidentspeeches/raw/") # flist gets all files in directory
+dir = "../../../data/presidentspeeches/raw/"  # the directory we will look for the files in
+flist = os.listdir(dir) # flist gets all files in directory
 for f in flist[1:5]:  # lets print the first 5 files in this directory
     print(f)
+
+# now lets count the number of words in the first 5 files
+for f in flist[1:5]: # go through the first 5 files in the list
+    fhandle = open(dir+f,"r") # open file for reading
+    words = fhandle.read().split()  # read file , then split it by whitespace into a list of words
+    print( f + " -> " + str(len(words)) ) # print the count of words per file
 
