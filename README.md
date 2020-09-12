@@ -1,5 +1,6 @@
-# RuCoBo
+# RuCoBo Yaks
 Runkle Coding Bootcamp
+
 
 A Bozzuto was here!
    / \__

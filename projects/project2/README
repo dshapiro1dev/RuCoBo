@@ -1,0 +1,22 @@
+Project 2:
+
+We will learn about built in Types:  /examples/builtin_types
+- numbers
+- strings (covered in project1)
+- lists
+- dictionaries
+- tuples
+- sets
+
+Examples to read:
+
+Assignment:
+basic: read presidential speeches
+       find most common words used by different presidents
+       how often do presidents refer to themselves "i / me" - by president
+       how long are their typical speeches
+       how long are the sentences
+challenge: analyze the complexity of english language used by different presidents
+           eg:  Flesch Kincaid  readability
+           https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests
+extra credit:  do your own analysis of presidential speeches - what is interesting / different
