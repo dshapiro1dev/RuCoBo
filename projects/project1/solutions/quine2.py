@@ -1,0 +1,1 @@
+z='z=%r;print(z%%z)';print(z%z);
