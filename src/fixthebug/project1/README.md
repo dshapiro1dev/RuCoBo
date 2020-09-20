@@ -1,2 +1,3 @@
-# here we present a number of 'buggy' solutions to project 1
-# fix each one - and explain
+# here we present  'buggy' solutions to project 1
+# fix each bug - and explain
+# some bugs are conceptual, some are formatting
