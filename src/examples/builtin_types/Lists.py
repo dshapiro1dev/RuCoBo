@@ -91,3 +91,13 @@ print(listboth)  # 1 2 5 8 9 20   <- puts the list together using a "+"
 # other fun things
 listboth.reverse() # what do you think this does
 
+
+# list of lists anyone?
+# this list has 3 entries - each one is a list itself
+# this can continue indefinitely
+nutso = [
+    [1,2,3,4,5],
+    ["yak","emu","gnat"],
+    [3.7,2.5,1.222]
+]
+print(nutso)
