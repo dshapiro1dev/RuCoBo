@@ -24,3 +24,10 @@ for file in flist:  # go through each file in the list
     fhandle = open(file,"r")   # open the file handle
     contents = fhandle.read()  # read contents into one giant string
     print("Number of lines is: %d  File is: %s " % (contents.count('\n'), file)) # count number of new lines
+
+# this time lets count the words
+for file in flist:
+    fhandle = open(file,"r")
+    contents = fhandle.read()
+    words = contents.split()
+    print("Num words: %d" % len(words))
