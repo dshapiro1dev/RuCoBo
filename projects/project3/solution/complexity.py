@@ -5,7 +5,7 @@ import glob    # getting list of files
 import re      # regular expression library
 
 # get list of files in directory
-flist = (glob.glob("../../data/presidentspeeches/raw/*.txt"))
+flist = (glob.glob("../../../data/presidentspeeches/raw/*.txt"))
 
 # only keep basic letters
 whitelist = set('0123456789abcdefghijklmnopqrstuvwxyz .')  # only use these characters - remove everything else
