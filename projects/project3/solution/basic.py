@@ -5,7 +5,7 @@ import glob    # getting list of files
 import re      # regular expression library
 
 # get list of files in directory
-flist = (glob.glob("/Users/danielshapiro/PycharmProjects/RuCoBo/data/presidentspeeches/raw/*.txt"))
+flist = (glob.glob("../../../data/presidentspeeches/raw/*.txt"))
 
 # create "drop" list:  common words
 droplist = ['the','of','to','and','in','a','that','is','for','be','it',
