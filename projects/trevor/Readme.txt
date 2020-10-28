@@ -21,3 +21,8 @@ In order to make sure that your work is properly working with our repo, here are
 3. When you're ready to share you work with everyone, you will need to "push" it to you copy of the RuCuBo repository
     that is on github. You can do this by selecting the "push" git command, it is the green arrow pointing up & right
     Or you can select this option from the pulldown menu by selecting "VCS > Git > Push"
+    Once you do this, your changes are securely stored on the internet for all of eternity, or until Microsoft goes
+    out of business. We'll use this to make a request to the mast RuCuBu project for it to pull your changes into the
+    master project. We call this a "pull request"
+
+4.
