@@ -19,4 +19,5 @@ In order to make sure that your work is properly working with our repo, here are
     that makes sense to you, as it is how you'll keep track of what you've done.
 
 3. When you're ready to share you work with everyone, you will need to "push" it to you copy of the RuCuBo repository
-    that is on github. You can do this by
+    that is on github. You can do this by selecting the "push" git command, it is the green arrow pointing up & right
+    Or you can select this option from the pulldown menu by selecting "VCS > Git > Push"
