@@ -22,7 +22,10 @@ while round < games:
         tries += 1
         guess = my_solver.make_guess()
         round_result = my_game.guess(guess)
-        # print(f"Word so far: {my_game.revealed_word()} Guessing the letter {guess}: {result}")
+        if round_result:
+            my_solver.update_word_so_far(my_game.revealed_word())
+        my_solver.learn_result(guess, round_result)
+        print(guess, end="")
     if tries <= my_game.tries:
         wins += 1
         game_result = "Win"

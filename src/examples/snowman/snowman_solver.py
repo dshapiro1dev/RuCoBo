@@ -1,12 +1,15 @@
+import random
+import re
+import string
+
 # -----------------------------------------------------------
 # To do:
 # 1. vowels - force vowel inclusion if not found a vowel
 # 2. q - follow by u if not chosen
 # 3. frequency - dont double count letter frequency in words
 # 4. if already guessed a letter - remove all words with that letter - if letter was a miss
-import random
-import re
-import string
+
+
 class Solver:
     # creation of object
     def __init__(self, strategy="ds_solver"):
