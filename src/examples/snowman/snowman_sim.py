@@ -18,16 +18,21 @@ while round < games:
     challenge_word = word_selector.get_word()
     my_solver = snowman_solver.Solver("frequency by length", len(challenge_word))
     my_game = snowman.Game(challenge_word, 12)
+    print(f"Round {round}: Word is {challenge_word}")
+    print("  ", end="")
     while my_game.word_revealed is False:
         tries += 1
         guess = my_solver.make_guess()
         round_result = my_game.guess(guess)
-        # print(f"Word so far: {my_game.revealed_word()} Guessing the letter {guess}: {result}")
+        if round_result:
+            my_solver.update_word_so_far(my_game.revealed_word())
+        my_solver.learn_result(guess, round_result)
+        print(guess, end="")
     if tries <= my_game.tries:
         wins += 1
         game_result = "Win"
     guesses_needed.append(tries)
-    print(f"Round {round}: Word is {challenge_word}, result: {game_result}")
+    print(f"\n  Result: {game_result}")
 
 
 
