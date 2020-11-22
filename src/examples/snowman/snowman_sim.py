@@ -45,9 +45,12 @@ while round < games:
         print(guess, end="")
     if tries <= my_game.tries:
         wins += 1
-        print(f"Win rate: {wins / round}")
         game_result = "Win"
         stats[length]['win'] += 1
+    else:
+        game_result = "Loss"
+
+    print(f"\nResult: {game_result}")
 
     # output stats
     print('STATISTICS SO FAR')
