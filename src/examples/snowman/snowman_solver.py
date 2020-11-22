@@ -26,19 +26,19 @@ class Solver:
         # pre-load all dictionaries by word lengh
         self.totaldict = get_dictionary()  # get all words  key: word  value: list of letters
         self.lengthdicts = []  # list: each entry by i -> dictionary set of words with length i
-        for i in range(0,50):
-            self.lengthdicts.append( set([]) )
+        for i in range(0, 50):
+            self.lengthdicts.append(set([]))
 
         for w in self.totaldict.keys():   # for each word , put into correct bucket
             length = len(self.totaldict[w])
             self.lengthdicts[length].add(w)
 
     # prepare variables for a new word game
-    def initialize(self,wordlength):
+    def initialize(self, wordlength):
         self.guessed_so_far = set([])   # letters guessed so far
         self.adlist = []                # adaptive list of letters sorted by best to worst - for guessing
         self.correctletters = set([])   # set of correct letters guessed so far
-        self.missedletters  = set([])   # set of missed letters guessed so far
+        self.missedletters = set([])   # set of missed letters guessed so far
         # note: make a copy of the dictionary - so we dont alter the original !! (not by reference)
         self.dict = self.lengthdicts[wordlength].copy()  # start with dictionary of words of this length
 
@@ -53,8 +53,8 @@ class Solver:
         removes = set([])     # will hold a set of words to remove from dictionary
 
         # check if this round revealed any new miss letters - filter dictionary if yes
-        missed = self.guessed_so_far - revset # letters which were guessed, but are not in word
-        if len(missed)>len(self.missedletters):  # a new letter was missed
+        missed = self.guessed_so_far - revset  # letters which were guessed, but are not in word
+        if len(missed) > len(self.missedletters):  # a new letter was missed
             newmissed = (missed - self.missedletters).pop()
             self.missedletters = missed  # update our missed letter list
             for lword in self.dict:  # process each word in dictionary
@@ -62,19 +62,19 @@ class Solver:
                     removes.add(lword)
 
         # check if this round revealed any new success letters - filter dictionary if yes
-        if len(revset)>1 and len(self.dict)>1:  # only process if have a new revealed letter  and not already guessed word
+        if len(revset) > 1 and len(self.dict) > 1:  # only process if new revealed letter & not already guessed word
             revset.remove('_')
-            if( len(revset) > len(self.correctletters)):  # a new letter has been revealed - update the dictionary
+            if len(revset) > len(self.correctletters):  # a new letter has been revealed - update the dictionary
                 # get the newly revealed letter
                 newletter = (revset - self.correctletters).pop()  # new letter revealed on this round
                 self.correctletters = revset              # update list of correct letters to include it
 
                 # process the newly revealed letter
                 present = set([])  # indices of all the locations where the letter was revealed
-                for i in range(0,len(reveal)):
-                    if reveal[i]==newletter:
+                for i in range(0, len(reveal)):
+                    if reveal[i] == newletter:
                         present.add(i)
-                absent = set(range(0,len(reveal))) - present  # locations where the letter should not be
+                absent = set(range(0, len(reveal))) - present  # locations where the letter should not be
 
                 # filter the dictionary
                 # 1. all the places where the letter exists - confirm its there
@@ -103,12 +103,12 @@ class Solver:
             self.adlist = get_frequency_for_dict(self.dict)
 
         # first time - get adaptive list
-        if len(self.adlist)==0:
+        if len(self.adlist) == 0:
             self.adlist = get_frequency_for_dict(self.dict)
 
         # check if found any vowels so far (and not already guessed all vowels ) - if not, force a vowel
         force_vowel = False
-        if(len(revset.intersection(self.vowels))==0) and not self.vowels.issubset(self.guessed_so_far):
+        if(len(revset.intersection(self.vowels)) == 0) and not self.vowels.issubset(self.guessed_so_far):
             force_vowel = True
 
         # make best guess
@@ -125,15 +125,13 @@ class Solver:
             k += 1
 
         # if 'q' exists in word and not guessed a 'u' - force 'u'  [ if not already found word ]
-        if ('q' in revset) and ('u' not in self.guessed_so_far) and (len(self.dict)>1) and (guess != 'u'):
+        if ('q' in revset) and ('u' not in self.guessed_so_far) and (len(self.dict) > 1) and (guess != 'u'):
             guess = 'u'
 
         # record the guess
         self.guessed_so_far.add(guess)
 
         return guess
-
-
 
 
 def get_possible_letters():
@@ -166,9 +164,7 @@ def get_dictionary(length=0):
     words = fdata.split('\n')
     indict = {}
     for w in words:
-        if len(w) == length or length==0:
+        if len(w) == length or length == 0:
             indict[w] = list(w)
 
     return indict
-
-
