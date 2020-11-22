@@ -17,7 +17,7 @@ while round < games:
     game_result = "Loss"
     challenge_word = word_selector.get_word()
     my_solver = snowman_solver.Solver("frequency by length", len(challenge_word))
-    my_game = snowman.Game(challenge_word, 12)
+    my_game = snowman.Game(challenge_word, 6)
     print(f"Round {round}: Word is {challenge_word}")
     print("  ", end="")
     while my_game.word_revealed is False:
