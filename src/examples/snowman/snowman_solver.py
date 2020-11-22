@@ -1,101 +1,140 @@
-import random
-
-
+# -----------------------------------------------------------
+# To do:
+# 1. vowels - force vowel inclusion if not found a vowel
+# 2. q - follow by u if not chosen
+# 3. frequency - dont double count letter frequency in words
+# 4. if already guessed a letter - remove all words with that letter - if letter was a miss
 class Solver:
-    """This is where we come up with cool strategies for solving snowman puzzles"""
-
-    def __init__(self, strategy="random", word_length=10):
-        self.word_length = word_length
+    # creation of object
+    def __init__(self, strategy="ds_solver"):
+        # permanent variables
         self.possible_letters = get_possible_letters()
-        self.frequent_letters = list("etaoinsrhldcumfpgwybvkxjqz")
         self.strategy = strategy
-        self.guess_list = []
-        self.guessed_so_far = []
+        self.vowels = set(list('aeiouy'))
 
-    def make_guess(self,revealed_so_far):
-        if self.strategy == "frequency":
-            guess = self.frequent_letters.pop(0)
-        elif self.strategy == "frequency by length":
-            if len(self.guess_list) == 0:
-                self.guess_list = get_frequency(self.word_length)
-            guess = self.guess_list.pop(0)
-        elif self.strategy == "ds adaptive":
-            guess = self.ds_adaptive(revealed_so_far)
-        else:
-            index = random.randint(0, len(self.possible_letters) - 1)
-            guess = self.possible_letters.pop(index)
+        # temporary variables
+        self.guessed_so_far = set([])  # list of letters guessed so far
+        self.dict = set([])  # dictionary of words still under consideration
+        self.adlist = []  # adaptive list of letter to try sorted by frequency
+        self.correctletters = set([])  # set of correct letters guessed so far
 
+        # pre-load all dictionaries by word lengh
+        self.totaldict = get_dictionary()  # get all words  key: word  value: list of letters
+        self.lengthdicts = []  # list: each entry by i -> dictionary set of words with length i
+        for i in range(0,50):
+            self.lengthdicts.append( set([]) )
+
+        for w in self.totaldict.keys():   # for each word , put into correct bucket
+            length = len(self.totaldict[w])
+            self.lengthdicts[length].add(w)
+
+    # prepare variables for a new word game
+    def initialize(self,wordlength):
+        self.guessed_so_far = set([])   # letters guessed so far
+        self.adlist = []                # adaptive list of letters sorted by best to worst - for guessing
+        self.correctletters = set([])   # set of correct letters guessed so far
+        # note: make a copy of the dictionary - so we dont alter the original !! (not by reference)
+        self.dict = self.lengthdicts[wordlength].copy()  # start with dictionary of words of this length
+
+    # select guessing algorithm
+    def make_guess(self, revealed_so_far):
+        guess = self.ds_solver(revealed_so_far)
         return guess
 
-    # TO DO:
-    # 1. if  'e' appears in location 'i' only - remove all words w/ 'e' in non-i location
-    # 2. remove words that dont have 'e'  at all - if 'e' is revealed as in word
-    # 3. choose a letter (all else being equal) - that will cut the tree the most on next round
-    def ds_adaptive(self,reveal):
-        # get dictionary of words only this long
-        dict = get_dictionary(len(reveal))
+    # new efficient DS solver
+    def ds_solver(self, reveal):
+        revset = set(reveal)  # set of unique revealed letters so far (includes the '_')
 
-        # helper variables
-        length = len(reveal) # length of word
-        removes = {}         # dictionary of words to remove - that are mismatched
-        revletters = {}      # dictionary of revealed letters
-        for l in reveal:
-            if l!='_':
-                revletters[l]=1
+        # check if this round revealed any new letters - filter dictionary if yes
+        if len(revset)>1 and len(self.dict)>1:  # only process if have a new revealed letter  and not already guessed word
+            revset.remove('_')
+            if( len(revset) > len(self.correctletters)):  # a new letter has been revealed - update the dictionary
+                # get the newly revealed letter
+                newletter = (revset - self.correctletters).pop()  # new letter revealed on this round
+                self.correctletters = revset              # update list of correct letters to include it
 
-        # subselect a dictionary with only words that match revealed pattern so far
-        for lword in dict:
-            llist = list(lword)  # convert word into list of letters
-            # filter  : known letter at known position - not there in the word in dictionary
-            #           known letter in dictionary word at a position - but is not in the "reveal" at that position
-            for i in range(0,length):
-                if reveal[i]!='_' and llist[i]!=reveal[i]:
-                    removes[lword] = 1
-                if llist[i] in revletters.keys() and reveal[i]=='_':
-                    removes[lword] = 1
+                # process the newly revealed letter
+                present = set([])  # indices of all the locations where the letter was revealed
+                for i in range(0,len(reveal)):
+                    if reveal[i]==newletter:
+                        present.add(i)
+                absent = set(range(0,len(reveal))) - present  # locations where the letter should not be
 
-        # create cleaned dictionary only with matching words
-        cleandict = []
-        for lword in dict:
-            if lword not in removes:
-                cleandict.append(lword)
+                # filter the dictionary
+                # 1. all the places where the letter exists - confirm its there
+                # 2. all the places where the letter does not exist - confirm its not there
+                removes = set([])
+                for lword in self.dict:  # process each word in dictionary
+                    llist = self.totaldict[lword]  # convert word into list of letters
+                    reject = False
+                    for i in present:
+                        if llist[i] != newletter:
+                            reject = True
+                            break
+                    if not reject:
+                        for i in absent:
+                            if llist[i] == newletter:
+                                reject = True
+                                break
+                    if reject:
+                        removes.add(lword)
 
-        # get frequency only for a specified dictionary
-        adaptive_list = get_frequency_for_dict(cleandict)
+                # update the dictionary - removing rejected words
+                for word in removes:
+                    self.dict.remove(word)
+
+                # updated frequency preference only for a specified dictionary
+                self.adlist = get_frequency_for_dict(self.dict)
+
+        # first time - get adaptive list
+        if len(self.adlist)==0:
+            self.adlist = get_frequency_for_dict(self.dict)
+
+        # check if found any vowels so far (and not already guessed all vowels ) - if not, force a vowel
+        force_vowel = False
+        if(len(revset.intersection(self.vowels))==0) and not self.vowels.issubset(self.guessed_so_far):
+            force_vowel = True
 
         # make best guess
         found_guess = False
         k = 0
         guess = 'a'
         while not found_guess:
-            if adaptive_list[k] not in self.guessed_so_far:
-                guess = adaptive_list[k]
-                found_guess = True
+            if self.adlist[k] not in self.guessed_so_far:
+                guess = self.adlist[k]
+                if force_vowel:
+                    found_guess = guess in self.vowels
+                else:
+                    found_guess = True
             k += 1
 
         # record the guess
-        self.guessed_so_far.append(guess)
+        self.guessed_so_far.add(guess)
 
         return guess
+
+
+
 
 def get_possible_letters():
     return list("abcdefghijklmnopqrstuvwxyz")
 
-def get_frequency_for_dict(dict):
+
+def get_frequency_for_dict(indict):
     freq = {i: 0 for i in get_possible_letters()}
-    for word in dict:
-        for l in word:
-            freq[l] += 1
-    return sorted(freq, key= lambda x: freq[x], reverse=True)
+    for word in indict:
+        for ltt in word:
+            freq[ltt] += 1
+    return sorted(freq, key=lambda x: freq[x], reverse=True)
 
 
 def get_frequency(length=0):
-    dict = get_dictionary(length)
+    indict = get_dictionary(length)
     freq = {i: 0 for i in get_possible_letters()}
-    for word in dict:
-        for l in word:
-            freq[l] += 1
-    return sorted(freq, key= lambda x: freq[x], reverse=True)
+    for word in indict:
+        for ltt in word:
+            freq[ltt] += 1
+    return sorted(freq, key=lambda x: freq[x], reverse=True)
 
 
 def get_dictionary(length=0):
@@ -105,16 +144,11 @@ def get_dictionary(length=0):
     data = fhand.read().lower()
     fdata = ''.join(filter(whitelist.__contains__, data))
     words = fdata.split('\n')
-    dict = []
+    indict = {}
     for w in words:
-        if length > 0:
-            if len(w) == length:
-                dict.append(w)
-        else:
-            if len(w) > 1:
-                dict.append(w)
-    return dict
+        if len(w) == length or length==0:
+            indict[w] = list(w)
+
+    return indict
 
 
-# print("testing")
-# print(get_frequency(6))

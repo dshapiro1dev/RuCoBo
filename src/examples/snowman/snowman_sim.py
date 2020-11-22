@@ -7,7 +7,7 @@ print("Starting a game")
 
 
 round = 0
-games = 50000
+games = 100000
 wins = 0
 guesses_needed = []
 

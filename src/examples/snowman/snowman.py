@@ -7,6 +7,7 @@ class Game:
         self.word_list = list(word)
         self.tries = tries
         self.wrong_guesses = 0
+        self.right_guesses = 0
         self.guesses = []
         self.revealed_letters = []
         self.word_revealed = False
@@ -41,6 +42,7 @@ class Game:
                 x += 1
             if "_" not in self.revealed_letters:
                 self.word_revealed = True
+            self.right_guesses += 1
             return True
         else:
             self.wrong_guesses += 1
