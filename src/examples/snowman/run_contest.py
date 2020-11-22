@@ -33,7 +33,7 @@ for r in range(0,num_games):
     # run game
     while game.word_revealed is False:
         guess = guesser.make_guess(game.revealed_letters)
-        game.guess(guess)
+        result = game.guess(guess)
 
     # collect stats
     info = {}
