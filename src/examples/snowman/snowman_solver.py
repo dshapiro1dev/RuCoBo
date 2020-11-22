@@ -1,9 +1,13 @@
 # -----------------------------------------------------------
-# To do:
-# 1. vowels - force vowel inclusion if not found a vowel
-# 2. q - follow by u if not chosen
-# 3. frequency - dont double count letter frequency in words
-# 4. if already guessed a letter - remove all words with that letter - if letter was a miss
+# Added these features which improve the success:
+#         93.61 @ 10k words w/ no forced vowels [ baseline ]
+#         94.02 @ 10k words w/ forced vowels
+#         96.78 @ 10k words w/ removing words which have letters which are confirmed misses
+#         96.91 @ 10k words w/ not double counting letter frequency per word
+# xx 1. vowels - force vowel inclusion if not found a vowel
+# xx 2. q - follow by u if not chosen
+# xx 3. frequency - dont double count letter frequency in words
+# xx 4. if already guessed a letter - remove all words with that letter - if letter was a miss
 class Solver:
     # creation of object
     def __init__(self, strategy="ds_solver"):
@@ -17,6 +21,7 @@ class Solver:
         self.dict = set([])  # dictionary of words still under consideration
         self.adlist = []  # adaptive list of letter to try sorted by frequency
         self.correctletters = set([])  # set of correct letters guessed so far
+        self.missedletters = set([])   # set of missed letters guessed so far
 
         # pre-load all dictionaries by word lengh
         self.totaldict = get_dictionary()  # get all words  key: word  value: list of letters
@@ -33,6 +38,7 @@ class Solver:
         self.guessed_so_far = set([])   # letters guessed so far
         self.adlist = []                # adaptive list of letters sorted by best to worst - for guessing
         self.correctletters = set([])   # set of correct letters guessed so far
+        self.missedletters  = set([])   # set of missed letters guessed so far
         # note: make a copy of the dictionary - so we dont alter the original !! (not by reference)
         self.dict = self.lengthdicts[wordlength].copy()  # start with dictionary of words of this length
 
@@ -44,8 +50,18 @@ class Solver:
     # new efficient DS solver
     def ds_solver(self, reveal):
         revset = set(reveal)  # set of unique revealed letters so far (includes the '_')
+        removes = set([])     # will hold a set of words to remove from dictionary
 
-        # check if this round revealed any new letters - filter dictionary if yes
+        # check if this round revealed any new miss letters - filter dictionary if yes
+        missed = self.guessed_so_far - revset # letters which were guessed, but are not in word
+        if len(missed)>len(self.missedletters):  # a new letter was missed
+            newmissed = (missed - self.missedletters).pop()
+            self.missedletters = missed  # update our missed letter list
+            for lword in self.dict:  # process each word in dictionary
+                if newmissed in lword:
+                    removes.add(lword)
+
+        # check if this round revealed any new success letters - filter dictionary if yes
         if len(revset)>1 and len(self.dict)>1:  # only process if have a new revealed letter  and not already guessed word
             revset.remove('_')
             if( len(revset) > len(self.correctletters)):  # a new letter has been revealed - update the dictionary
@@ -63,7 +79,6 @@ class Solver:
                 # filter the dictionary
                 # 1. all the places where the letter exists - confirm its there
                 # 2. all the places where the letter does not exist - confirm its not there
-                removes = set([])
                 for lword in self.dict:  # process each word in dictionary
                     llist = self.totaldict[lword]  # convert word into list of letters
                     reject = False
@@ -79,12 +94,13 @@ class Solver:
                     if reject:
                         removes.add(lword)
 
-                # update the dictionary - removing rejected words
-                for word in removes:
-                    self.dict.remove(word)
+        if len(removes):
+            # update the dictionary - removing rejected words
+            for word in removes:
+                self.dict.remove(word)
 
-                # updated frequency preference only for a specified dictionary
-                self.adlist = get_frequency_for_dict(self.dict)
+            # updated frequency preference only for a specified dictionary
+            self.adlist = get_frequency_for_dict(self.dict)
 
         # first time - get adaptive list
         if len(self.adlist)==0:
@@ -108,6 +124,10 @@ class Solver:
                     found_guess = True
             k += 1
 
+        # if 'q' exists in word and not guessed a 'u' - force 'u'  [ if not already found word ]
+        if ('q' in revset) and ('u' not in self.guessed_so_far) and (len(self.dict)>1) and (guess != 'u'):
+            guess = 'u'
+
         # record the guess
         self.guessed_so_far.add(guess)
 
@@ -123,7 +143,7 @@ def get_possible_letters():
 def get_frequency_for_dict(indict):
     freq = {i: 0 for i in get_possible_letters()}
     for word in indict:
-        for ltt in word:
+        for ltt in set(word):
             freq[ltt] += 1
     return sorted(freq, key=lambda x: freq[x], reverse=True)
 

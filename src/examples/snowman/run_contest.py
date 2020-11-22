@@ -19,7 +19,7 @@ tracker = []
 
 # create output file of statistics
 fhand = open("stats.txt","w")
-print("word,length,right,wrong,guesses",file=fhand)
+print("word,length,right,wrong,guesses,outcome",file=fhand)
 
 # run contest over selected number of words
 for r in range(0,num_games):
