@@ -12,7 +12,7 @@ import string
 
 class Solver:
     # creation of object
-    def __init__(self, strategy="ds_solver"):
+    def __init__(self, strategy="ds_solver", word_length=0):
         # permanent variables
         self.possible_letters = get_possible_letters()
         self.strategy = strategy
