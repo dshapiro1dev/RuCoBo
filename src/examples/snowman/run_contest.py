@@ -6,7 +6,7 @@ from datetime import datetime
 now = datetime.now()
 
 # parameters
-num_games = 10000   # number of rounds to run per contest
+num_games = 150000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
 # create a guesser object

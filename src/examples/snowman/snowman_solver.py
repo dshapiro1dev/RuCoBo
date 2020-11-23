@@ -115,7 +115,7 @@ class Solver:
         found_guess = False
         k = 0
         guess = 'a'
-        while not found_guess:
+        while not found_guess and k < len(self.adlist):
             if self.adlist[k] not in self.guessed_so_far:
                 guess = self.adlist[k]
                 if force_vowel:
