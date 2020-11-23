@@ -10,7 +10,7 @@ num_games = 10000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
 # create a guesser object
-guesser = snowman_solver.Solver("ds adaptive")
+guesser = snowman_solver.DanSolver()
 
 # create a tracker of contest success
 wins   = 0
@@ -18,8 +18,8 @@ losses = 0
 tracker = []
 
 # create output file of statistics
-fhand = open("stats.txt","w")
-print("word,length,right,wrong,guesses",file=fhand)
+fhand = open("stats.txt", "w")
+print("word,length,right,wrong,guesses", file=fhand)
 
 # run contest over selected number of words
 for r in range(0,num_games):

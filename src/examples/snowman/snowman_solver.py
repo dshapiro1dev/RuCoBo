@@ -11,20 +11,10 @@ import string
 # 4. if already guessed a letter - remove all words with that letter - if letter was a miss
 
 
-class Solver:
+class DanSolver:
     # creation of object
-    def __init__(self, strategy="ds_solver", word_length=0):
+    def __init__(self):
         # permanent variables
-        self.possible_letters = get_possible_letters()
-        self.strategy = strategy
-        self.guess_list = []
-        self.possible_words = get_dictionary(word_length)
-        self.confirmed_letters = []
-        self.excluded_letters = []
-        self.remaining_letters = get_possible_letters()
-        self.word_so_far = ""
-        while len(self.word_so_far) < word_length:
-            self.word_so_far += "_"
         self.vowels = set(list('aeiouy'))
 
         # temporary variables
@@ -33,7 +23,7 @@ class Solver:
         self.adlist = []  # adaptive list of letter to try sorted by frequency
         self.correctletters = set([])  # set of correct letters guessed so far
 
-        # pre-load all dictionaries by word lengh
+        # pre-load all dictionaries by word length
         self.totaldict = get_dictionary()  # get all words  key: word  value: list of letters
         self.lengthdicts = []  # list: each entry by i -> dictionary set of words with length i
         for i in range(0, 50):
@@ -129,19 +119,6 @@ class Solver:
 
         return guess
 
-    def learn_result(self, letter, result):
-        if result:
-            if letter not in self.confirmed_letters:
-                self.confirmed_letters.append(letter)
-        else:
-            if letter not in self.excluded_letters:
-                self.excluded_letters.append(letter)
-        self.possible_words = refine_list(self.possible_words, self.confirmed_letters, self.excluded_letters,
-                                          self.word_so_far)
-
-    def update_word_so_far(self, word):
-        self.word_so_far = word.lower()
-
 
 class BozSolver:
     """Specific strategy as defined by Brian Bozzuto"""
@@ -164,13 +141,10 @@ class BozSolver:
         self.confirmed_letters = []
         self.excluded_letters = []
         self.remaining_letters = get_possible_letters()
-        self.word_so_far = ""
-        while len(self.word_so_far) < word_length:
-            self.word_so_far += "_"
         self.possible_words = self.available_words
 
-    def make_guess(self, word_so_far = ""):
-        self.possible_words = refine_list(self.possible_words, self.excluded_letters, word_so_far)
+    def make_guess(self, word_so_far=""):
+        self.possible_words = self.refine_list(self.possible_words, self.excluded_letters, word_so_far)
         guess_list = get_frequency_for_dict(self.possible_words)
         guess = ""
         for letter in guess_list:
@@ -181,7 +155,30 @@ class BozSolver:
                 break
         return guess
 
+    def refine_list(self, word_list, excluded_letters=[], known_word=""):
+        regex_text = self.build_regex(known_word, excluded_letters)
+        regex = re.compile(regex_text)
+        refined_list = list(filter(regex.match, word_list))
+        return refined_list
 
+    def build_regex(self, known_word, excluded_letters=[]):
+        wild_card = "["
+        if len(excluded_letters) > 0:
+            wild_card += "^"
+            for el in excluded_letters:
+                wild_card += el
+            wild_card += "]"
+        else:
+            wild_card += "a-z]"
+
+        letters = list(known_word)
+        regex = ""
+        for l in letters:
+            if l == "_":
+                regex += wild_card
+            elif l != " ":
+                regex += l
+        return regex
 
 
 def get_possible_letters():
@@ -194,42 +191,6 @@ def get_frequency_for_dict(indict):
         for ltt in word:
             freq[ltt] += 1
     return sorted(freq, key=lambda x: freq[x], reverse=True)
-
-
-def get_frequency(length=0):
-    indict = get_dictionary(length)
-    freq = {i: 0 for i in get_possible_letters()}
-    for word in indict:
-        for ltt in word:
-            freq[ltt] += 1
-    return sorted(freq, key=lambda x: freq[x], reverse=True)
-
-
-def refine_list(word_list, excluded_letters=[], known_word=""):
-    regex_text = build_regex(known_word, excluded_letters)
-    regex = re.compile(regex_text)
-    refined_list = list(filter(regex.match, word_list))
-    return refined_list
-
-
-def build_regex(known_word, excluded_letters=[]):
-    wild_card = "["
-    if len(excluded_letters) > 0:
-        wild_card += "^"
-        for el in excluded_letters:
-            wild_card += el
-        wild_card += "]"
-    else:
-        wild_card += "a-z]"
-
-    letters = list(known_word)
-    regex = ""
-    for l in letters:
-        if l == "_":
-            regex += wild_card
-        elif l != " ":
-            regex += l
-    return regex
 
 
 def get_dictionary(length=0):
@@ -245,3 +206,4 @@ def get_dictionary(length=0):
             indict[w] = list(w)
 
     return indict
+

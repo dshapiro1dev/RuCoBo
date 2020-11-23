@@ -22,7 +22,7 @@ while round < games:
     print(f"Round {round}: Word is {challenge_word}")
     print("  ", end="")
 #    my_solver = snowman_solver.Solver("frequency by length", len(challenge_word))
-    my_solver = snowman_solver.Solver("ds adaptive", len(challenge_word))  # 93 % success
+    my_solver = snowman_solver.DanSolver("ds adaptive", len(challenge_word))  # 93 % success
 
     my_game = snowman.Game(challenge_word, 20)
 
