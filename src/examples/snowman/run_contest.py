@@ -10,7 +10,7 @@ num_games = 150000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
 # create a guesser object
-guesser = snowman_solver.Solver("ds adaptive")
+guesser = snowman_solver.DanSolver()
 
 # create a tracker of contest success
 wins   = 0
@@ -34,7 +34,7 @@ for r in range(0,num_games):
     # run game
     while game.word_revealed is False:
         guess = guesser.make_guess(game.revealed_letters)
-        game.guess(guess)
+        result = game.guess(guess)
 
     # collect stats
     info = {}
