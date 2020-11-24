@@ -9,15 +9,11 @@ now = datetime.now()
 num_games = 150000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
-# create a guesser object
-guesser = snowman_solver.DanSolver()
-# guesser = snowman_solver.BozSolver()
-
 # create a tracker of contest success
 wins   = 0
 losses = 0
 tracker = []
-# use a list of rocoboians, and use this to update the word selection & logging
+# use a dictionary of rocoboians, and use this to update the word selection & logging
 rocobian = {
     "a": "adam",
     "n": "natan",
@@ -26,18 +22,41 @@ rocobian = {
 }
 player = "" # the rocobian who will be providing the word
 while player == "":
-    selection = input("Please select a rucoboian providing the word (Natan, Yael, Trevor, Adam)").lower()
-    if selection in rocobian.keys():
-        player = rocobian[selection]
-    elif selection in rocobian.values():
-        player = selection
+    p_sel = input("Please select a rucoboian providing the word (Natan, Yael, Trevor, Adam)").lower() # player selection
+    if p_sel in rocobian.keys():
+        player = rocobian[p_sel]
+    elif p_sel in rocobian.values():
+        player = p_sel
     else:
-        print(f"sorry {selection} isn't a valid option. Please name a Rocoboian or use their first"
-              f" initial.")
+        print(f"sorry {p_sel} isn't a valid option. Please name a Rocoboian or use their first initial.")
 print(f"Okay, the player is {player.title()}")
 
+# user a dictionary of solvers, and use this to select the proper solving strategy
+challengers = {
+    "b": "brian",
+    "d": "daniel"
+}
+challenger = "" # the person whose solver will be userd
+while challenger == "":
+    c_sel = input("Please select who should solve (Daniel, Brian)").lower() # challenger selection
+    if c_sel in challengers.keys():
+        challenger = challengers[c_sel]
+    elif c_sel in challengers.values():
+        challenger = c_sel
+    else:
+        print(f"Sorry {c_sel} isn't a valid option. Please name a challenger or use their first initial")
+print(f"Okay, the challenger is {challenger.title()}")
+
+if challenger == "daniel":
+    guesser = snowman_solver.DanSolver()
+elif challenger == "brian":
+    guesser = snowman_solver.BozSolver()
+else:
+    print(f"No guessing strategy was found for the challenger {challenger}")
+    exit(1)
+
 # create output file of statistics
-stats_file = f"stats-{player}.txt"
+stats_file = f"stats/stats-{player}-vs-{challenger}.txt"
 fhand = open(stats_file, "w")
 print("word,length,right,wrong,guesses,outcome", file=fhand)
 
