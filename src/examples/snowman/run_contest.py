@@ -10,7 +10,8 @@ num_games = 150000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
 # create a guesser object
-guesser = snowman_solver.DanSolver()
+# guesser = snowman_solver.Solver()
+guesser = snowman_solver.BozSolver()
 
 # create a tracker of contest success
 wins   = 0
@@ -18,13 +19,13 @@ losses = 0
 tracker = []
 
 # create output file of statistics
-fhand = open("stats.txt","w")
+fhand = open("stats-yael.txt","w")
 print("word,length,right,wrong,guesses,outcome",file=fhand)
 
 # run contest over selected number of words
 for r in range(0,num_games):
     # pick a word - create a snowman game for it
-    word = word_selector.get_word()
+    word = word_selector.get_word("natan")
     game = snowman.Game(word, num_allowed)
 
     # initialize guesser
