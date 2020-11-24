@@ -10,8 +10,8 @@ num_games = 150000   # number of rounds to run per contest
 num_allowed = 6  # number of missed guesses per word for a victory [classic hangman: 6 ]
 
 # create a guesser object
-# guesser = snowman_solver.Solver()
-guesser = snowman_solver.BozSolver()
+guesser = snowman_solver.DanSolver()
+# guesser = snowman_solver.BozSolver()
 
 # create a tracker of contest success
 wins   = 0

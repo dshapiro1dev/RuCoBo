@@ -13,7 +13,7 @@ import string
 # xx 2. q - follow by u if not chosen
 # xx 3. frequency - dont double count letter frequency in words
 # xx 4. if already guessed a letter - remove all words with that letter - if letter was a miss
-class Solver:
+class DanSolver:
     # creation of object
     def __init__(self):
         # permanent variables
