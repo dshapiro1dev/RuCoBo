@@ -17,15 +17,34 @@ guesser = snowman_solver.BozSolver()
 wins   = 0
 losses = 0
 tracker = []
+# use a list of rocoboians, and use this to update the word selection & logging
+rocobian = {
+    "a": "adam",
+    "n": "natan",
+    "t": "trevor",
+    "y": "yael"
+}
+player = "" # the rocobian who will be providing the word
+while player == "":
+    selection = input("Please select a rucoboian providing the word (Natan, Yael, Trevor, Adam)").lower()
+    if selection in rocobian.keys():
+        player = rocobian[selection]
+    elif selection in rocobian.values():
+        player = selection
+    else:
+        print(f"sorry {selection} isn't a valid option. Please name a Rocoboian or use their first"
+              f" initial.")
+print(f"Okay, the player is {player.title()}")
 
 # create output file of statistics
-fhand = open("stats-yael.txt","w")
-print("word,length,right,wrong,guesses,outcome",file=fhand)
+stats_file = f"stats-{player}.txt"
+fhand = open(stats_file, "w")
+print("word,length,right,wrong,guesses,outcome", file=fhand)
 
 # run contest over selected number of words
 for r in range(0,num_games):
     # pick a word - create a snowman game for it
-    word = word_selector.get_word("natan")
+    word = word_selector.get_word(player)
     game = snowman.Game(word, num_allowed)
     print("Running  word is: ",word," <- ")
 
