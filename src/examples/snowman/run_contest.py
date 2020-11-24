@@ -26,6 +26,7 @@ for r in range(0,num_games):
     # pick a word - create a snowman game for it
     word = word_selector.get_word()
     game = snowman.Game(word, num_allowed)
+    print("Running  word is: ",word," <- ")
 
     # initialize guesser
     guesser.initialize(len(word))
