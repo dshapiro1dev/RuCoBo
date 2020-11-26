@@ -27,7 +27,7 @@ from pygame.locals import *
 import math
 
 white = [255, 255, 255]
-black = [0, 0, 0]
+black = [0, 0, 100]
 clock = pygame.time.Clock()
 
 
