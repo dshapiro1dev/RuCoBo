@@ -13,7 +13,7 @@ class AlienInvasion:
         self.settings = Settings()
 
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-        pygame.display.set_caption("Rocobo in Space")
+        pygame.display.set_caption("YAKS! in Space")
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
