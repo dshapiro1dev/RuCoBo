@@ -125,14 +125,92 @@ def get_word(rocoboian =""):
         hard_word_list = []
 
         for w in word_list:
-            if 2 < len(w) < 4 and "j" in w:
+            if len(w) == 4 and "j" in w:
                 hard_word_list.append(w)
 
         word = choice(hard_word_list)
 
     elif rocoboian == "natan":
-        dict = {'perm': 1}
-        word = choice(list(dict.keys()))
+        # this program will create words to stump abba's and brian's guessers.
+
+        # characters allowed
+        dict = {}
+
+        # get dict of all available words with key value pairs of "word":1
+        fname = "/usr/share/dict/words"
+        fhand = open(fname)
+        data = fhand.read().lower()
+        fdata = ''.join(filter(whitelist.__contains__, data))
+        words = fdata.split('\n')
+        for w in words:
+            if (len(w) > 2):
+                dict[w] = 1
+
+        # get most common word length in dictionary
+        lendict = {}
+        for word in dict.keys():
+            length = len(word)
+            if length in lendict.keys():
+                lendict[length] += 1
+            else:
+                lendict[length] = 1
+
+        # create dict_2 (dictionary of best length words only)
+        dict_2 = {}
+        for w in words:
+            if (len(w) == 4):
+                dict_2[w] = 0
+
+        # find most uncommon letters in dict 2
+        # for each word, break into list of ltrs.
+        # if first letter in  freq. increment value by one, if not, add to dict with value of one.continue
+        freq = {}
+        for w in dict_2.keys():
+            x = list(w)
+            for q in x:
+                if q in freq:
+                    freq[q] += 1
+                else:
+                    freq[q] = 1
+
+        # sort letters  in dict 2 by frequency
+        letter_rank = {}
+        i = 1
+        for l in sorted(freq.keys(), key=lambda x: freq[x], reverse=True):
+            # print(f"{l}  ")
+            letter_rank[l] = i
+            i += 1
+        # create ranked dict
+        wrd_rank = {}
+        for w in dict_2.keys():
+            wrd_rank[w] = 0
+
+        # rank words in dict_2 by how many uncommon letters they have
+        for yakster in wrd_rank.keys():
+            q = 0
+            x = list(yakster)
+            for l in x:
+                q += (letter_rank[l])
+            wrd_rank[yakster] = q
+
+        x = 1
+        # sort words by how devilish they are, and print into a new list`
+        hard_word_list = []
+        yakey = 0
+        for l in sorted(wrd_rank.keys(), key=lambda x: wrd_rank[x], reverse=True):
+            hard_word_list.append(l)
+            if yakey > 150:
+                break
+            else:
+                yakey += 1
+        evilet = set(['x', 'q', 'z', 'j'])
+        shortdict = []
+        for q in hard_word_list:
+            wow = set(q)
+            if len(q) == 4 and wow.intersection(evilet):
+                shortdict.append(q)
+        # and with at least one of Z J Q X
+        word = choice(shortdict)
 
     else:
         with open("/usr/share/dict/words") as file_object:
