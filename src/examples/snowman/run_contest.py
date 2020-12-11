@@ -36,7 +36,7 @@ challengers = {
     "b": "brian",
     "d": "daniel"
 }
-challenger = "" # the person whose solver will be userd
+challenger = "" # the person whose solver will be used
 while challenger == "":
     c_sel = input("Please select who should solve (Daniel, Brian)").lower() # challenger selection
     if c_sel in challengers.keys():
@@ -87,6 +87,7 @@ for r in range(0,num_games):
     glist = ""
     glist = glist.join(game.guesses)
     stat = ""
+    guesser.learn_result(word, info['win'])
     if(info['win']):
         stat = "WIN "
         wins += 1
