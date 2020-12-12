@@ -136,6 +136,8 @@ class DanSolver:
 
         return guess
 
+    def learn_result(self, word, result):
+        """"placeholder function that is used by BozSolver, and added here so no errors are thrown when it's called"""
 
 class BozSolver:
     """Specific strategy as defined by Brian Bozzuto"""
@@ -151,6 +153,13 @@ class BozSolver:
         self.remaining_letters = []
         self.word_so_far = ""
         self.possible_words = []
+        self.observed_words = []
+        self.games_played = 0
+        self.primary_strategy_used = 0
+        self.secondary_strategy_used = 0
+        self.primary_strategy_wins = 0
+        self.secondary_strategy_wins = 0
+        self.primary_strategy = True
 
     def initialize(self, word_length):
         # This is called to initialize a new game under the same basic assumptions of available words & letters
@@ -158,7 +167,13 @@ class BozSolver:
         self.confirmed_letters = []
         self.excluded_letters = []
         self.remaining_letters = get_possible_letters()
-        self.possible_words = self.available_words
+        self.primary_strategy = self.pick_strategy()
+        if self.primary_strategy:
+            self.primary_strategy_used += 1
+            self.possible_words = self.available_words
+        else:
+            self.secondary_strategy_used += 1
+            self.possible_words = self.observed_words
 
     def make_guess(self, word_so_far=""):
         self.possible_words = self.refine_list(self.possible_words, self.excluded_letters, word_so_far)
@@ -171,6 +186,8 @@ class BozSolver:
                 self.excluded_letters.append(letter)
                 break
         return guess
+
+    # def get_next_letter(self, letter_list):
 
     def refine_list(self, word_list, excluded_letters=[], known_word=""):
         regex_text = self.build_regex(known_word, excluded_letters)
@@ -196,6 +213,40 @@ class BozSolver:
             elif l != " ":
                 regex += l
         return regex
+
+    def learn_result(self, word, win):
+        """return the final word and if the algorithm won"""
+        if self.primary_strategy:
+            self.primary_strategy_used += 1
+            if win:
+                self.primary_strategy_wins += 1
+        else:
+            self.secondary_strategy_used += 1
+            if win:
+                self.secondary_strategy_wins += 1
+        if word not in self.observed_words:
+            self.observed_words.append(word)
+        self.games_played += 1
+
+    def pick_strategy(self):
+        # For the first 25 rounds, use the primary strategy
+        if self.games_played <= 25:
+            return True
+        # For the next 25 rounds, if the primary strategy has less than a 75% success rate, move to the secondary
+        elif self.games_played <= 50:
+            if (self.primary_strategy_wins / self.primary_strategy_used) > 0.75:
+                return True
+            else:
+                return False
+        # For games beyond 50, if the secondary strategy was used, compare efficacy and pick on going forward
+        else:
+            if self.secondary_strategy_used > 0 and \
+                    (self.secondary_strategy_wins / self.secondary_strategy_used) > \
+                    (self.primary_strategy_wins / self.primary_strategy_used):
+                return False
+            else:
+                return True
+
 
 
 def get_possible_letters():
