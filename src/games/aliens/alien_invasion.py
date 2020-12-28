@@ -8,6 +8,7 @@ from alien import Alien
 from time import sleep
 from button import Button
 from score_board import Scoreboard
+from boomerang import Boomerang
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior"""
@@ -25,6 +26,7 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.boomerangs = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
@@ -49,6 +51,7 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
+                self._update_boomerangs()
 
             self._update_screen()
 
@@ -71,10 +74,17 @@ class AlienInvasion:
         """respond to bullet-alien collisions."""
         # Check for any bullets that have hit aliens.
         # if so, get rid of the bullet and the alien.
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        bullet_collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if bullet_collisions:
+            for aliens in bullet_collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
 
-        if collisions:
-            for aliens in collisions.values():
+        # do the same thing for the boomerangs
+        boomerang_collisions = pygame.sprite.groupcollide(self.boomerangs, self.aliens, False, True)
+        if boomerang_collisions:
+            for aliens in boomerang_collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
@@ -125,6 +135,8 @@ class AlienInvasion:
             self.ship.moving_left = False
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_b:
+            self._fire_boomerang()
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks play."""
@@ -180,6 +192,12 @@ class AlienInvasion:
             for alien_number in range(number_aliens_x):
                 self._create_alien(alien_number, row_number)
 
+    def _fire_boomerang(self):
+        """Creates a boomerang and sends it out"""
+        if len(self.boomerangs) < self.settings.boomerang_allowed:
+            new_boomerang = Boomerang(self)
+            self.boomerangs.add(new_boomerang)
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
@@ -198,6 +216,7 @@ class AlienInvasion:
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
             self.bullets.empty()
+            self.boomerangs.empty()
 
             #Create a new fleet and center the ship
             self._create_fleet()
@@ -219,8 +238,23 @@ class AlienInvasion:
         # look for aliens hitting the bottom of the screen.
         self._check_aliens_bottom()
 
+    def _update_boomerangs(self):
+        """update the position of the boomerangs and get rid of any off the map"""
+        # update boomerang positions
+        self.boomerangs.update()
+
+        # Get rid of boomerangs that have returned below the ship
+        screen_rect = self.screen.get_rect()
+
+        for boomerang in self.boomerangs.copy():
+            if boomerang.rect.top > screen_rect.bottom:
+                self.boomerangs.remove(boomerang)
+
+        if pygame.sprite.spritecollideany(self.ship, self.boomerangs):
+            self._ship_hit()
+
     def _update_bullets(self):
-        """Update posotion of bullets and get rid of old bullets"""
+        """Update position of bullets and get rid of old bullets"""
         # update bullet positions
         self.bullets.update()
 
@@ -238,6 +272,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.boomerangs.draw(self.screen)
 
         # Draw the play button if the game is inactive.
         if not self.stats.game_active:
