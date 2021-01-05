@@ -6,12 +6,20 @@
 mangled = "https://docs.google.com/document/d/1FK7pUWYt139erPO48fIc0ukHkpSYUhkAwYWPwTMfn8owmxlR7OnkYgo/edit?usp=sharing"
 
 # make an empty list called:  list1
+list1 = []
 
 # put the numbers 12 through 255 inclusive into list1  [ inclusive means  12,13,...,255  , including the 12 and 255 ]
+for num in range(12, 256):
+    list1.append(num)
+
 
 # select every 13th entry of list1 , starting at and including the 11th entry - put the results into list2
+list2 = list1[10:256:13]
+print(list2)
 
 # remove the last 8 entries of list2
+del list2 [-8:]
+print(list2)
 
 # remove the first 2 entries of list2
 
@@ -36,9 +44,9 @@ mangled = "https://docs.google.com/document/d/1FK7pUWYt139erPO48fIc0ukHkpSYUhkAw
 # insert the 1st element of list5 into location 7 of list3
 
 # now lets print out the characters in list3
-for i in list3:
+"""for i in list3:
     print(i,end="")
-print()
+print()"""
 
 # the string you just printed  will have some letters and numbers
 # look for that string the mangled address above - and delete it.
