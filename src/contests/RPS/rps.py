@@ -1,4 +1,5 @@
 # This is the main RPS module
+import brainRPSAI
 import danRPSAI
 
 # definitions
@@ -68,7 +69,8 @@ if __name__ == "__main__":
     user2 = "danAI"
 
     # create AIs  [ send info to AI: N , competitor name ]
-    ai = danRPSAI.RPSAI(n,user1)  # replace this w/ <name>RPSAI,  here user1 is the competitor's name
+    # ai = danRPSAI.RPSAI(n,user1)  # replace this w/ <name>RPSAI,  here user1 is the competitor's name
+    ai = brainRPSAI.RPSAI(n, user1)  # replace this w/ <name>RPSAI,  here user1 is the competitor's name
 
     # statistics
     tally = {}
@@ -81,8 +83,8 @@ if __name__ == "__main__":
         print(f"\nRunning game {i}")
 
         # make a play
-  ###      e1 = fixEntry(input("Play: [r,p,s] "))  # get entry from human player
-        e1 = ai.choosePlay()  # temp - remove - this should be the HUMAN entry
+        e1 = fixEntry(input("Play: [r,p,s] "))  # get entry from human player
+  #      e1 = ai.choosePlay()  # temp - remove - this should be the HUMAN entry
         e2 = ai.choosePlay()
         winner = getWinner(e1,e2)  # 0:draw  1:player1  2:player2
 
