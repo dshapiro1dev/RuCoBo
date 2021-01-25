@@ -14,32 +14,38 @@ class RPSAI:
         random.seed(time.time())
 
         # series
-        self.series = []   # series of events [ one entry:  e1, e2, w ]           self.d2_freq_ema.append({})
+        self.series = []  # series of events [ one entry:  e1, e2, w ]           self.d2_freq_ema.append({})
 
-    # -------------------------------
+    # ----------------------`---------
     # choosePlay: select a play to make
     def choosePlay(self):
-        values = ['r','p','s']  # possible values rock, paper, scissor
-        winplay = { 'r':'p', 'p':'s', 's':'r'}  # what to play key: opponent prediction  value: my winning move response
-        r = random.uniform(0,1)  # random number between 0 and 1
+        guesscounts = self.getGuessCounts()
+        mostcommchoice = max(guesscounts, key=guesscounts.get)
+        values = ['r', 'p', 's']  # possible values rock, paper, scissor
+        winplay = {'r': 'p', 'p': 's',
+                   's': 'r'}  # what to play key: opponent prediction  value: my winning move response
+        r = random.uniform(0, 1)  # random number between 0 and 1
 
-        # initial distribution
-
-        if self.counter == 0:  # Our first round should likely go to paper, because people pick rocks. They are fools!
-            dist = {'r': [0, 2 / 6], 'p': [2 / 6, 5 / 6], 's': [5 / 6, 1]}
-        elif self.counter == 1:  # Favor scissors
-            dist = {'r': [0, 1 / 6], 'p': [1 / 6, 3 / 6], 's': [3 / 6, 1]}
-        else:
-            dist = {'r': [0, 1 / 3], 'p': [1 / 3, 2 / 3], 's': [2 / 3, 1]}
+        bestguess = winplay[mostcommchoice]
 
         # pick a random entry from distribution
-        play = "none"
-        for tp in dist.keys():
-            if r>=dist[tp][0] and r<=dist[tp][1]:
-                play = tp
-
+        play = bestguess
 
         return play
+
+    def getGuessCounts(self):
+
+        counts = {'r': 0, 'p': 0, 's': 0}
+        for letter in self.series:
+            theirguess = letter[0]
+            if theirguess == "r":
+                counts["r"] += 1
+            elif theirguess == "p":
+                counts["p"] += 1
+            elif theirguess == "s":
+                counts["s"] += 1
+        print(counts)
+        return counts
 
     # --------------------------------
     # record outcome:
@@ -48,7 +54,7 @@ class RPSAI:
     #   winner:  [0,1,2] = draw, competitor win, we win
     def outcome(self, e1, e2, winner):
         # record time series
-        oc = [e1,e2,winner]
+        oc = [e1, e2, winner]
         self.series.append(oc)
-        self.counter+=1
+        self.counter += 1
         return
