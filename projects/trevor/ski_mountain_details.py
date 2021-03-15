@@ -15,6 +15,11 @@ class ski_mountain():
         driver.get(url)
         time.sleep(3)
 
+        # Get the state
+        parsed_word = url.split("/")
+        state = parsed_word[3]
+        self.details["state"] = state
+
         # Get the resort Name
         resort_name = driver.find_element_by_xpath("//span[contains(@class, 'resort_name')]").text
         self.name = resort_name
@@ -91,7 +96,6 @@ class ski_mountain():
             self.details['expert runs'] = 0
 
         driver.quit()
-
 
 def p2f(x):
     if x == "%":
