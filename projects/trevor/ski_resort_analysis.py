@@ -2,18 +2,9 @@ from ski_mountain_details import ski_mountain
 import pandas as pd
 
 if __name__ == "__main__":
-    file_name = "resorts.csv"
+    file_name = "resort_details.csv"
     df = pd.read_csv(file_name)
     resort_data = df.to_dict()
-
-    resort_data['summit'] = {}
-    resort_data['drop'] = {}
-    resort_data['beginner runs'] = {}
-    resort_data['intermediate runs'] = {}
-    resort_data['advanced runs'] = {}
-    resort_data['expert runs'] = {}
-
-
 
     for row in resort_data['name']:
         print(f"Updating values for {resort_data['name'][row]} at {resort_data['link'][row]}... ", end='')
@@ -24,11 +15,9 @@ if __name__ == "__main__":
         resort_data['intermediate runs'][row] = my_mountain.details['intermediate runs']
         resort_data['advanced runs'][row] = my_mountain.details['advanced runs']
         resort_data['expert runs'][row] = my_mountain.details['expert runs']
+        resort_data['state'][row] = my_mountain.details['state']
         updated_df = pd.DataFrame(data=resort_data)
-        updated_df.to_csv(file_name)
+        updated_df.to_csv(file_name, index=False)
         print(f"Success!")
 
-
-    updated_df = pd.DataFrame(data=resort_data)
-    updated_df.to_csv(file_name)
     print(f"Ski resort data successfully updated and written to the file {file_name}.")

@@ -1,5 +1,6 @@
-name,link
-Alpental,https://www.onthesnow.com/washington/alpental/ski-resort.html
-Mt. Baker,https://www.onthesnow.com/washington/mt-baker/ski-resort.html
-Stevens Pass Resort,https://www.onthesnow.com/washington/stevens-pass-resort/ski-resort.html
-Eaglecrest Ski Area,https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort.html
+,Unnamed: 0,name,link,summit,drop,beginner runs,intermediate runs,advanced runs,expert runs
+0,0,Pico Mountain ,https://www.onthesnow.com/vermont/pico-mountain-at-killington/ski-resort.html,3967ft,1967ft,10.0,27.0,22.0,2.0
+1,1,Okemo Mountain Resort,https://www.onthesnow.com/vermont/okemo-mountain-resort/ski-resort.html,3344ft,2200ft,40.0,46.0,25.0,11.0
+2,2,Stowe Mountain,https://www.onthesnow.com/vermont/stowe-mountain-resort/ski-resort.html,,,,,,
+3,3,Blue Hills Ski Area,https://www.onthesnow.com/massachusetts/blue-hills-ski-area/ski-resort.html,,,,,,
+4,4,Pats Peak,https://www.onthesnow.com/new-hampshire/pats-peak/ski-resort.html,,,,,,

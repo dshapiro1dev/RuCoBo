@@ -34,6 +34,7 @@ class ski_mountain_list():
         elements = WebDriverWait(self.driver, 20).until(
             EC.presence_of_all_elements_located((By.XPATH, "//a[contains(@style, 'font-size: 11px;')]")))
 
+        self.resort_data = {}
         self.resort_data['name'] = []
         self.resort_data['link'] = []
         self.resort_count = 0
