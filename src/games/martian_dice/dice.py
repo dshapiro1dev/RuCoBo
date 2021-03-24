@@ -28,13 +28,13 @@ class Dice():
         while x < self.quantity:
             self.dice.append(Die(start_blank))
             x += 1
-        self.sort()
+        # self.sort()
 
     def reroll(self):
         self.new_roll = True
         for each_die in self.dice:
             each_die.roll()
-        self.sort()
+        # self.sort()
 
     def sort(self):
         self.dice = sorted(self.dice, key=lambda die: die.value)
